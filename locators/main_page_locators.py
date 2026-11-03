@@ -17,3 +17,4 @@ MODAL_CLOSE_BUTTON = (By.XPATH, _OPENED_MODAL + "//button[contains(@class,'Modal
 
 # до готовности заказа в окне стоит заглушка «9999»
 ORDER_NUMBER = (By.CSS_SELECTOR, "h2[class*='Modal_modal__title_shadow']")
+MAIN_TITLE = (By.XPATH, "//h1[text()='Соберите бургер']")

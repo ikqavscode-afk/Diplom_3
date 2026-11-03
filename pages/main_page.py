@@ -41,3 +41,6 @@ class MainPage(BasePage):
             not in ("", ORDER_NUMBER_PLACEHOLDER)
         )
         return int(self.get_text(locators.ORDER_NUMBER))
+
+    def is_main_title_visible(self) -> bool:
+        return self.is_visible(locators.MAIN_TITLE)
