@@ -41,5 +41,4 @@ class BasePage:
         return True
 
     def wait_invisible(self, locator: Locator) -> bool:
-        return self.wait.until(EC.invisibility_of_element_located(locator))
-    
+        return bool(self.wait.until(EC.invisibility_of_element_located(locator)))
