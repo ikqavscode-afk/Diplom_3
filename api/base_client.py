@@ -12,4 +12,3 @@ class BaseClient:
         url = f"{settings.base_url}{path}"
         with allure.step(f"{method} {path}"):
             return self.session.request(method, url, timeout=settings.timeout, **kwargs)
-        

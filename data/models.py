@@ -7,4 +7,3 @@ class User:
     password: str
     name: str
     access_token: str = ""
-    

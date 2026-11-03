@@ -13,7 +13,10 @@ ORDER_BUTTON = (By.XPATH, "//button[text()='Оформить заказ']")
 # все окна лежат в DOM сразу, открытое отличается классом Modal_modal_opened
 OPENED_MODAL = (By.XPATH, _OPENED_MODAL)
 INGREDIENT_MODAL_TITLE = (By.XPATH, "//h2[text()='Детали ингредиента']")
-MODAL_CLOSE_BUTTON = (By.XPATH, _OPENED_MODAL + "//button[contains(@class,'Modal_modal__close')]")
+MODAL_CLOSE_BUTTON = (
+    By.XPATH,
+    _OPENED_MODAL + "//button[contains(@class,'Modal_modal__close')]",
+)
 
 # до готовности заказа в окне стоит заглушка «9999»
 ORDER_NUMBER = (By.CSS_SELECTOR, "h2[class*='Modal_modal__title_shadow']")

@@ -9,8 +9,11 @@ from helpers.browsers import BROWSERS, create_driver
 from helpers.generators import build_user
 from pages.login_page import LoginPage
 
+
 def pytest_addoption(parser: pytest.Parser) -> None:
-    parser.addoption("--headless", action="store_true", help="Run browsers without a window")
+    parser.addoption(
+        "--headless", action="store_true", help="Run browsers without a window"
+    )
 
 
 @pytest.fixture
@@ -26,6 +29,7 @@ def driver(request: pytest.FixtureRequest) -> Iterator[WebDriver]:
     browser = create_driver(request.param, request.config.getoption("--headless"))
     yield browser
     browser.quit()
+
 
 @pytest.fixture
 def logged_in_driver(driver: WebDriver, user: User) -> WebDriver:

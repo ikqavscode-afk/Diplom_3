@@ -1,10 +1,11 @@
 import allure
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from data import endpoints
 from locators import order_feed_locators as locators
 from pages.base_page import BasePage, Locator
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.remote.webdriver import WebDriver
+
 
 class OrderFeedPage(BasePage):
     @allure.step("Открыть ленту заказов")
@@ -31,7 +32,10 @@ class OrderFeedPage(BasePage):
     def _wait_counter_above(self, locator: Locator, value: int) -> bool:
         try:
             self.wait.until(
-                lambda driver: (text := driver.find_element(*locator).text).isdigit() and int(text) > value
+                lambda driver: (
+                    (text := driver.find_element(*locator).text).isdigit()
+                    and int(text) > value
+                )
             )
         except TimeoutException:
             return False
@@ -49,4 +53,3 @@ class OrderFeedPage(BasePage):
     def _in_progress_numbers(driver: WebDriver) -> list[int]:
         items = driver.find_elements(*locators.ORDERS_IN_PROGRESS)
         return [int(item.text) for item in items if item.text.isdigit()]
-    

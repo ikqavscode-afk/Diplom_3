@@ -6,7 +6,9 @@ from pages.order_feed_page import OrderFeedPage
 
 @allure.feature("Лента заказов")
 class TestOrderFeed:
-    @allure.title("При создании нового заказа счётчик «Выполнено за все время» увеличивается")
+    @allure.title(
+        "При создании нового заказа счётчик «Выполнено за все время» увеличивается"
+    )
     def test_new_order_increases_total_completed(self, logged_in_driver):
         feed_page = OrderFeedPage(logged_in_driver)
         feed_page.go_to_order_feed()
@@ -18,7 +20,9 @@ class TestOrderFeed:
 
         assert feed_page.wait_total_completed_above(total_before)
 
-    @allure.title("При создании нового заказа счётчик «Выполнено за сегодня» увеличивается")
+    @allure.title(
+        "При создании нового заказа счётчик «Выполнено за сегодня» увеличивается"
+    )
     def test_new_order_increases_today_completed(self, logged_in_driver):
         feed_page = OrderFeedPage(logged_in_driver)
         feed_page.go_to_order_feed()

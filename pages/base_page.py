@@ -1,5 +1,9 @@
 import allure
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import (
+    ElementClickInterceptedException,
+    NoSuchElementException,
+    TimeoutException,
+)
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
@@ -7,12 +11,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from config.settings import settings
 from locators import header_locators
-
-from selenium.common.exceptions import (
-    ElementClickInterceptedException,
-    NoSuchElementException,
-    TimeoutException,
-)
 
 Locator = tuple[str, str]
 DRAG_AND_DROP_JS = """
@@ -28,14 +26,11 @@ fire(target, 'drop');
 fire(source, 'dragend');
 """
 
+
 class BasePage:
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver
         self.wait = WebDriverWait(driver, settings.timeout)
-
-    @property
-    def current_url(self) -> str:
-        return self.driver.current_url
 
     @allure.step("Открыть страницу {path}")
     def open(self, path: str = "/") -> None:
@@ -56,8 +51,12 @@ class BasePage:
         WebDriverWait(
             self.driver,
             settings.timeout,
-            ignored_exceptions=(NoSuchElementException, ElementClickInterceptedException),
+            ignored_exceptions=(
+                NoSuchElementException,
+                ElementClickInterceptedException,
+            ),
         ).until(click_element)
+
     def type_text(self, locator: Locator, text: str) -> None:
         with allure.step(f"Ввести текст в поле {locator}"):
             field = self.find(locator)
@@ -76,10 +75,12 @@ class BasePage:
 
     def wait_invisible(self, locator: Locator) -> bool:
         return bool(self.wait.until(EC.invisibility_of_element_located(locator)))
-    
+
     @allure.step("Перетащить {source} в {target}")
     def drag_and_drop(self, source: Locator, target: Locator) -> None:
-        self.driver.execute_script(DRAG_AND_DROP_JS, self.find(source), self.find(target))
+        self.driver.execute_script(
+            DRAG_AND_DROP_JS, self.find(source), self.find(target)
+        )
 
     @allure.step("Перейти в «Конструктор»")
     def go_to_constructor(self) -> None:

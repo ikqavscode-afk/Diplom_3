@@ -5,7 +5,6 @@ from pages.main_page import MainPage
 
 @allure.feature("Основная функциональность")
 @allure.story("Окно ингредиента")
-
 class TestIngredientModal:
     @allure.title("Клик по ингредиенту открывает окно с деталями")
     def test_click_on_ingredient_opens_details_modal(self, driver):
@@ -25,4 +24,3 @@ class TestIngredientModal:
         main_page.close_modal()
 
         assert main_page.is_modal_closed()
-        

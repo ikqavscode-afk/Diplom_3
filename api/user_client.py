@@ -25,4 +25,3 @@ class UserClient(BaseClient):
             endpoints.USER,
             headers={"Authorization": user.access_token},
         )
-    
