@@ -44,3 +44,10 @@ class MainPage(BasePage):
 
     def is_main_title_visible(self) -> bool:
         return self.is_visible(locators.MAIN_TITLE)
+
+    @allure.step("Создать заказ с булкой")
+    def create_order(self) -> int:
+        self.add_bun_to_order()
+        number = self.make_order()
+        self.close_modal()
+        return number
