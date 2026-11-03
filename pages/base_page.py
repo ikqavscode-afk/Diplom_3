@@ -6,9 +6,27 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from config.settings import settings
+from locators import header_locators
+
+from selenium.common.exceptions import (
+    ElementClickInterceptedException,
+    NoSuchElementException,
+    TimeoutException,
+)
 
 Locator = tuple[str, str]
-
+DRAG_AND_DROP_JS = """
+const dataTransfer = new DataTransfer();
+const fire = (element, type) => element.dispatchEvent(
+    new DragEvent(type, {bubbles: true, cancelable: true, dataTransfer})
+);
+const [source, target] = arguments;
+fire(source, 'dragstart');
+fire(target, 'dragenter');
+fire(target, 'dragover');
+fire(target, 'drop');
+fire(source, 'dragend');
+"""
 
 class BasePage:
     def __init__(self, driver: WebDriver) -> None:
@@ -28,14 +46,24 @@ class BasePage:
 
     @allure.step("Клик по элементу {locator}")
     def click(self, locator: Locator) -> None:
-        self.wait.until(EC.element_to_be_clickable(locator)).click()
+        def click_element(driver: WebDriver) -> bool:
+            element = EC.element_to_be_clickable(locator)(driver)
+            if not element:
+                return False
+            element.click()
+            return True
 
+        WebDriverWait(
+            self.driver,
+            settings.timeout,
+            ignored_exceptions=(NoSuchElementException, ElementClickInterceptedException),
+        ).until(click_element)
     def type_text(self, locator: Locator, text: str) -> None:
         with allure.step(f"Ввести текст в поле {locator}"):
             field = self.find(locator)
             field.clear()
             field.send_keys(text)
-            
+
     def get_text(self, locator: Locator) -> str:
         return self.find(locator).text
 
@@ -48,3 +76,15 @@ class BasePage:
 
     def wait_invisible(self, locator: Locator) -> bool:
         return bool(self.wait.until(EC.invisibility_of_element_located(locator)))
+    
+    @allure.step("Перетащить {source} в {target}")
+    def drag_and_drop(self, source: Locator, target: Locator) -> None:
+        self.driver.execute_script(DRAG_AND_DROP_JS, self.find(source), self.find(target))
+
+    @allure.step("Перейти в «Конструктор»")
+    def go_to_constructor(self) -> None:
+        self.click(header_locators.CONSTRUCTOR_LINK)
+
+    @allure.step("Перейти в «Ленту заказов»")
+    def go_to_order_feed(self) -> None:
+        self.click(header_locators.ORDER_FEED_LINK)
