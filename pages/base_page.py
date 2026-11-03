@@ -30,6 +30,12 @@ class BasePage:
     def click(self, locator: Locator) -> None:
         self.wait.until(EC.element_to_be_clickable(locator)).click()
 
+    def type_text(self, locator: Locator, text: str) -> None:
+        with allure.step(f"Ввести текст в поле {locator}"):
+            field = self.find(locator)
+            field.clear()
+            field.send_keys(text)
+            
     def get_text(self, locator: Locator) -> str:
         return self.find(locator).text
 
