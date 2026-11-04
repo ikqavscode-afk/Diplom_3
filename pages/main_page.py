@@ -36,9 +36,9 @@ class MainPage(BasePage):
     @allure.step("Оформить заказ")
     def make_order(self) -> int:
         self.click(locators.ORDER_BUTTON)
-        self.wait.until(
-            lambda driver: (
-                driver.find_element(*locators.ORDER_NUMBER).text
+        self.wait_until(
+            lambda: (
+                self.find_present(locators.ORDER_NUMBER).text
                 not in ("", ORDER_NUMBER_PLACEHOLDER)
             )
         )
