@@ -1,3 +1,7 @@
+from collections.abc import Callable
+
+import allure
+
 import allure
 from selenium.common.exceptions import (
     ElementClickInterceptedException,
@@ -73,6 +77,12 @@ class BasePage:
             return False
         return True
 
+    def find_present(self, locator: Locator) -> WebElement:
+        return self.driver.find_element(*locator)
+
+    def wait_until(self, condition: Callable[[], bool]) -> None:
+        self.wait.until(lambda _: condition())
+        
     def wait_invisible(self, locator: Locator) -> bool:
         return bool(self.wait.until(EC.invisibility_of_element_located(locator)))
 
