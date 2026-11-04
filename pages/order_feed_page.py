@@ -31,9 +31,9 @@ class OrderFeedPage(BasePage):
 
     def _wait_counter_above(self, locator: Locator, value: int) -> bool:
         try:
-            self.wait.until(
-                lambda driver: (
-                    (text := driver.find_element(*locator).text).isdigit()
+            self.wait_until(
+                lambda: (
+                    (text := self.find_present(locator).text).isdigit()
                     and int(text) > value
                 )
             )
