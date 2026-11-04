@@ -1,6 +1,5 @@
 import allure
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.remote.webdriver import WebDriver
 
 from data import endpoints
 from locators import order_feed_locators as locators
@@ -44,12 +43,11 @@ class OrderFeedPage(BasePage):
     @allure.step("Проверить, что заказ {number} есть в разделе «В работе»")
     def is_order_in_progress(self, number: int) -> bool:
         try:
-            self.wait.until(lambda driver: number in self._in_progress_numbers(driver))
+            self.wait_until(lambda: number in self._in_progress_numbers())
         except TimeoutException:
             return False
         return True
 
-    @staticmethod
-    def _in_progress_numbers(driver: WebDriver) -> list[int]:
-        items = driver.find_elements(*locators.ORDERS_IN_PROGRESS)
+    def _in_progress_numbers(self) -> list[int]:
+        items = self.find_all(locators.ORDERS_IN_PROGRESS)
         return [int(item.text) for item in items if item.text.isdigit()]
